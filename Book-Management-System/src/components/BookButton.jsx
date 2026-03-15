@@ -1,6 +1,9 @@
-export default function BookButton({ title, color }) {
+import { Link } from "react-router-dom"
+
+export default function BookButton({ title, color, link }) {
   return (
-    <button class=" 
+    <Link to={link} >
+    <button className=" 
                text-white 
                 m-2
                 w-full
@@ -13,6 +16,6 @@ export default function BookButton({ title, color }) {
                active:scale-95 
                transition-all duration-200" style={{ background: color }}>
       {title}
-    </button>
+    </button></Link>
   )
 }
