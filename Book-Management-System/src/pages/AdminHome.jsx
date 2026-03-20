@@ -11,7 +11,7 @@ export default function AdminHome() {
   return (
     <div>
 
-      <div className="flex justify-between flex-wrap px-6 items-center">
+      <div className="flex justify-between flex-wrap px-6 hareKrsnaitems-center">
         <Card title={'Admin'} desc={''} bg={'oklch(79.5% 0.184 86.047) '} />
         <div className="flex flex-wrap items-center justify-center">
         <Card title={'Instock'} desc={200} bg={'oklch(64.8% 0.2 131.684)'} />

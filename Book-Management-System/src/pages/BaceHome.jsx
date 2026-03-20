@@ -3,11 +3,13 @@ import BookButton from "../components/BookButton"
 import TableData from "../components/TableData"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
+import Pay from "../components/Pay";
 
 export default function BaceHome() {
 
   const [baceDetails, setBaceDetails] = useState({});
 const { id } = useParams();
+const [payVisible, setPayVisible] = useState(false);
 
   useEffect(
     ()=>{
@@ -37,7 +39,15 @@ const { id } = useParams();
         <div className="flex flex-col items-center justify-center">
 
           < BookButton title={'Request Books'} color={'oklch(64.8% 0.2 131.684)'} />
+
+          <div
+          onClick={
+            ()=>{setPayVisible(true)}
+          }
+          >
+
           < BookButton title={'Submit Payment Info'} color={'oklch(70.7% 0.165 254.624)'} />
+          </div>
         </div>
 
       </div>
@@ -52,6 +62,8 @@ const { id } = useParams();
         </div>
 
       </div>
+
+      <Pay isOpen={payVisible}  onClose={()=>setPayVisible(false)}/>
 
     </div>
   )
