@@ -4,26 +4,56 @@ import TableData from "../components/TableData"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 import Pay from "../components/Pay";
+import Request from "../components/Request";
 
 export default function BaceHome() {
 
   const [baceDetails, setBaceDetails] = useState({});
-const { id } = useParams();
-const [payVisible, setPayVisible] = useState(false);
+  const { id } = useParams();
+  const [payVisible, setPayVisible] = useState(false);
+  const [requestVisible, setRequestVisible] = useState(false);
+  const [transactions, setTransactions] = useState([]);
+  const [monthScore, setMonthScore] = useState(0);
 
-  useEffect(
-    ()=>{
-      const baceData = async ()=>{
-        const response = await fetch(`http://localhost:4000/bace/get-details/${id}`);
-        const data = await response.json();
-        setBaceDetails(data);
-      }
+  useEffect(() => {
+    const baceData = async () => {
+      const response = await fetch(`http://localhost:4000/bace/get-details/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      setBaceDetails(data);
+    };
+    baceData();
 
-        baceData();
-    },
-    [id]
+    // Fetch all transactions for score calculation
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:4000/transactions/all", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setTransactions(data))
+      .catch((error) => console.error("Error fetching transactions:", error));
+  }, [id]);
 
-  )
+  useEffect(() => {
+    // Calculate this month's score (sum of total_books for current month for this bace)
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const score = transactions
+      .filter((tx) => {
+        const txDate = new Date(tx.timestamp);
+        return tx.bace === baceDetails.name && txDate.getMonth() === currentMonth && txDate.getFullYear() === currentYear;
+      })
+      .reduce((sum, tx) => sum + (tx.total_books || 0), 0);
+    setMonthScore(score);
+  }, [transactions, baceDetails.name]);
 
  
 
@@ -34,20 +64,13 @@ const [payVisible, setPayVisible] = useState(false);
         <Card title={baceDetails.name} desc={'location'} bg={'oklch(79.5% 0.184 86.047) '} />
         <div className="flex flex-wrap items-center justify-center">
         <Card title={'Instock'} desc={baceDetails.total_books} bg={'oklch(64.8% 0.2 131.684)'} />
-        <Card title={'This month Score'} desc={140} bg={'oklch(43.2% 0.232 292.759)'} />
+        <Card title={'This month Score'} desc={monthScore} bg={'oklch(43.2% 0.232 292.759)'} />
 
         <div className="flex flex-col items-center justify-center">
 
-          < BookButton title={'Request Books'} color={'oklch(64.8% 0.2 131.684)'} />
+          < BookButton title={'Request Books'} color={'oklch(64.8% 0.2 131.684)'} onClick={()=>setRequestVisible(true)}/>
 
-          <div
-          onClick={
-            ()=>{setPayVisible(true)}
-          }
-          >
-
-          < BookButton title={'Submit Payment Info'} color={'oklch(70.7% 0.165 254.624)'} />
-          </div>
+          
         </div>
 
       </div>
@@ -64,6 +87,8 @@ const [payVisible, setPayVisible] = useState(false);
       </div>
 
       <Pay isOpen={payVisible}  onClose={()=>setPayVisible(false)}/>
+       <Request isOpen={requestVisible}
+            onClose={()=>setRequestVisible(false)}/>
 
     </div>
   )

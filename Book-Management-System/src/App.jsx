@@ -1,11 +1,12 @@
 import NavBar from "./components/NavBar"
 import Bace from "./pages/BaceHome"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import LoginPage ,{ AdminLoginPage, BaceLoginPage } from "./pages/LoginPage"
+import LoginPage  from "./pages/LoginPage"
 import AdminHome from "./pages/AdminHome"
 import Register from "./pages/Register"
 import TrDetail from "./pages/TrDetail"
 import BaceInfo from "./pages/BaceInfo"
+import { Logout } from "./pages/Logout"
 
 function App() {
 
@@ -17,9 +18,8 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/bacehome/:id" element={<Bace />} />
         <Route path="/admin/dashboard" element={<AdminHome />} />
-        <Route path="/login/admin" element={<AdminLoginPage />} />
-        <Route path="/login/bace" element={<BaceLoginPage />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="/tx" element={<TrDetail />} />
         <Route path="/binfo" element={<BaceInfo />} />
 

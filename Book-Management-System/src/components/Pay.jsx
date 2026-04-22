@@ -1,42 +1,40 @@
 import { useState } from "react";
 
-export default function Pay({isOpen, onClose}) {
+export default function Pay({isOpen, onClose, tx, onSuccess}) {
 
-    const [bacename, setBacename] = useState('');
-    const [smallBooks, setSmallBooks] = useState(0);
-    const [bigBooks, setBigBooks] = useState(0);
-    const [mahaBigBooks, setMahaBigBooks] = useState(0);
+    const [trId, setTrId] = useState('');
     const [amount, setAmount] = useState(0);
 
-    if(!isOpen) return null;
+    if(!isOpen || !tx) return null;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const totalBooks = Number(smallBooks) + Number(bigBooks) + Number(mahaBigBooks);
-        // Send allotment data to backend API
-        fetch('http://localhost:4000/admin/transfer', {
-            method: 'POST',
+        if (amount > tx.amount.pending) {
+    alert("Amount exceeds pending balance");
+    return;
+}
+        fetch("http://localhost:4000/transactions/status", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ 
-                name: bacename,
-                small_books: Number(smallBooks),
-                big_books: Number(bigBooks),
-                mahabig_books: Number(mahaBigBooks),
-                amount: Number(amount),
-             }),
+            body: JSON.stringify({
+                id: tx._id,
+                transaction_id: trId,
+                paid: tx.amount.paid + amount,
+                pending: tx.amount.pending - amount,
+            }),
         })
-        .then(response => response.json())
-        .then(data => {
-            if(data.success){
-                alert("Books allotted successfully!");
-                onClose(); // Close the allotment form after successful submission
-            } else {
-                alert("Allotment failed: " + data.message);
-            }
+        .then((response) => response.json())
+        .then((data) => {
+            onSuccess(data.transaction);
+           onClose();
+    setTrId('');
+    setAmount(0);
         })
-        .catch(error => console.error("Error during allotment:", error));
+        .catch((error) => {
+            console.error("Error processing payment:", error);
+        });         
     }
  
     return (
@@ -48,39 +46,32 @@ export default function Pay({isOpen, onClose}) {
                 <h2 className="text-2xl font-bold mb-4">Submit the Lakshmi</h2>
                 
                 <form onSubmit={handleSubmit} >
-                    <div className="mb-4">
+                    <div className="mb-4 flex items-center gap-2">
                         <label htmlFor="bacename" className="block text-sm font-medium text-gray-700">BACE Name</label>
-                        <input type="text" id="bacename" name="bacename" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setBacename(e.target.value)}/>
+                        <span className="block px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{tx.bace}</span>
                     </div>
-                    <div className="mb-4 flex">
-                        <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">Small Books</label>
-                        <input type="number" id="smallBooks" name="smallBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setSmallBooks(e.target.value)}/>
+                    <div className="mb-4 flex items-center gap-2">
+                        <label htmlFor="bacename" className="block text-sm font-medium text-gray-700">Amount Paid</label>
+                        <span className="block px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{tx.amount.paid}</span>
                     </div>
-                    <div className="mb-4 flex">
-                        <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">Big Books</label>
-                        <input type="number" id="bigBooks" name="bigBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setBigBooks(e.target.value)}/>
+                    <div className="mb-4 flex items-center gap-2">
+                        <label htmlFor="bacename" className="block text-sm font-medium text-gray-700">Amount Pending</label>
+                        <span className="block px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{tx.amount.pending}</span>
                     </div>
-                    <div className="mb-4 flex">
-                        <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">MahaBig Books</label>
-                        <input type="number" id="mahaBigBooks" name="mahaBigBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setMahaBigBooks(e.target.value)}/>
-                    </div>
-                    <div className="mb-4 flex gap-2 items-center">
-                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">Total</label>
-                        <span id="quantity" name="quantity" className="" >{Number(smallBooks) + Number(bigBooks) + Number(mahaBigBooks)}
-                            </span>
+                    <div className="mb-4 ">
+                        <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">Transaction Id</label>
+                        <input type="text" id="smallBooks" name="smallBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setTrId(e.target.value)}/>
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="bacename" className="block text-sm font-medium text-gray-700">Total Amount in Rs.</label>
-                        <input type="Number" id="amount" name="amount" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setAmount(e.target.value)}/>
+                        <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">Enter Amount</label>
+                        <input type="number" id="bigBooks" name="bigBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setAmount(Number(e.target.value))}/>
                     </div>
+                    
                 <button type="submit" className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    Allot Now
+                    Submit Now
                 </button>
                 </form>
-
-
-
-            </div>
+           </div>
         </div>
     )
 

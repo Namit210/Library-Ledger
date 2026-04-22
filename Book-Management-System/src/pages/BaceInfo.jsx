@@ -5,7 +5,13 @@ export default function BaceInfo() {
     const [baceIds, setBaceIds] = useState([]);
     useEffect(
         ()=>{
-            fetch('http://localhost:4000/bace/all')
+            fetch('http://localhost:4000/bace/all',{
+                method:'GET',
+                headers:{
+                    'Content-Type':'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
             .then(response => response.json())
             .then(data => {
                 const ids = data.map(bace => bace._id);

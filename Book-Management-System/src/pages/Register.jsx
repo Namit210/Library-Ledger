@@ -20,38 +20,15 @@ export default function Register(){
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name: name, password, role: role}),
+            body: JSON.stringify({ name, password, role}),
         }).then(response => response.json())
         .then(data => {
             if(data.success){
-                alert("Registration successful!");
+                alert("Registration successful! user");
             }
         })
-
-        if(role === 'bace'){
-        
-        // Send registration data to backend API
-        fetch('http://localhost:4000/bace/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: name, password}),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.success){
-                alert("Registration successful!");
-                console.log(data);
-                
-                // Optionally, redirect to login page or home page
-            } else {
-                alert("Registration failed: " + data.message);
-            }
-        })
-        .catch(error => console.error("Error during registration:", error));
-    }   
     }
+       
     return (
          <div className="h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

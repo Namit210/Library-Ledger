@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom"
 
-export default function BookButton({ title, color, link }) {
+export default function BookButton({ title, color, link, onClick }) {
   return (
     <Link to={link} >
-    <button className=" 
+    <button onClick={onClick} className=" 
                text-white 
                 m-2
                 w-full
