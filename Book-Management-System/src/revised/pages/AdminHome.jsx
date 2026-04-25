@@ -3,7 +3,8 @@ import NavBar from "../components/NavBar";
 import LongCard from "../components/LongCard";
 import { SiBookstack } from "react-icons/si";
 import { MdSportsScore } from "react-icons/md";
-
+import MobileCard from "../components/MobileCard";
+import transactions from "../../data/transactions.json"
 
 export default function AdminHome() {
  
@@ -27,9 +28,10 @@ export default function AdminHome() {
         Transactions
         </div>
         
+
         </div>
         
-
+        <MobileCard  />
     </div>
   )
 }

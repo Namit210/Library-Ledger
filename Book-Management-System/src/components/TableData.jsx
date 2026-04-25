@@ -6,6 +6,7 @@ import Pay from "./Pay";
 import { jwtDecode } from "jwt-decode";
 import Allot from "./Allot";
 import { FiInfo } from "react-icons/fi";
+import MobileCard from "../revised/components/MobileCard";
 
 export default function TableData({ name }) {
   const [allTransactionsdata, setAllTransactionsdata] = useState([]);
@@ -60,8 +61,27 @@ export default function TableData({ name }) {
       <div className="mb-2">
         <SearchInput onSearch={setQuery} />
       </div>
-      {/* Responsive scrollable table container */}
-      <div className="max-h-[400px] overflow-x-auto overflow-y-auto border rounded-lg bg-gray-50 p-2 font-lato">
+      {/* Mobile view: show MobileCard, hidden on md+ screens */}
+      <div className="md:hidden">
+        {transactions.map((row) => (
+          <MobileCard
+            key={row._id}
+            bace={row.bace}
+            tid={row.transaction_id}
+            books={row.total_books}
+            amount={row.amount?.paid}
+            pending={row.amount?.pending}
+            timestamp={new Date(row.timestamp).toLocaleTimeString()}
+            date={new Date(row.timestamp).toDateString()}
+            role={role}
+            name={name}
+            onPay={() => { setPayVisible(true); setSelectedTx(row); }}
+            onAllot={() => { setAllotVisible(true); setSelectedTx(row); }}
+          />
+        ))}
+      </div>
+      {/* Desktop/tablet view: show table, hidden on small screens */}
+      <div className="max-h-[400px] overflow-x-auto overflow-y-auto border rounded-lg bg-gray-50 p-2 font-lato hidden md:block">
         <div className="min-w-full">
           <div className="grid grid-cols-6 gap-2 font-semibold bg-gray-200 rounded-t-lg px-2 py-3 text-center text-sm md:text-base">
             <div>Date</div>
