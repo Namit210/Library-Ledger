@@ -6,7 +6,7 @@ import Pay from "./Pay";
 import { jwtDecode } from "jwt-decode";
 import Allot from "./Allot";
 import { FiInfo } from "react-icons/fi";
-import MobileCard from "../revised/components/MobileCard";
+import MobileCard from "./MobileCard";
 
 export default function TableData({ name }) {
   const [allTransactionsdata, setAllTransactionsdata] = useState([]);
@@ -58,7 +58,7 @@ export default function TableData({ name }) {
   return (
     <div>
       {/* Search bar stays fixed above the scrollable table */}
-      <div className="mb-2">
+      <div className="mb-2 md:static sticky top-0 z-30 bg-white pt-2 pb-2 md:pt-0 md:pb-0">
         <SearchInput onSearch={setQuery} />
       </div>
       {/* Mobile view: show MobileCard, hidden on md+ screens */}
@@ -77,6 +77,8 @@ export default function TableData({ name }) {
             name={name}
             onPay={() => { setPayVisible(true); setSelectedTx(row); }}
             onAllot={() => { setAllotVisible(true); setSelectedTx(row); }}
+            desc={row.desc}
+            _id={row._id}
           />
         ))}
       </div>

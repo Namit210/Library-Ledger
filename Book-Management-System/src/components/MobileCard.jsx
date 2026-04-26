@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { FiInfo } from "react-icons/fi";
+import { createPortal } from "react-dom";
+
 export default function MobileCard({
   bace,
   tid,
@@ -9,8 +13,12 @@ export default function MobileCard({
   role,
   name,
   onPay,
-  onAllot
+  onAllot,
+  desc,
+  _id
 }) {
+  const [showDesc, setShowDesc] = useState(false);
+
   return (
     <div className="font-lato p-4 mx-2 gap-2 shadow-lg rounded-lg bg-white mt-4 flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-10 duration-300">
       <div className="flex justify-between text-green-700 border-b border-gray-300 pb-2">
@@ -22,8 +30,41 @@ export default function MobileCard({
         <h1 className="font-bold text-2xl">{bace}</h1>
       </div>
       <div>
-        <p className="text-sm font-bold text-green-900 uppercase">Transaction Id</p>
+        <p className="text-sm font-bold text-green-900 uppercase flex items-center gap-1">
+          Transaction Id
+          {desc && (
+            <span
+              className="ml-1 cursor-pointer inline-flex items-center"
+              onClick={() => setShowDesc(true)}
+              data-tooltip-id={_id}
+            >
+              <FiInfo className="text-lg text-gray-500 hover:text-blue-500 transition-colors duration-200" />
+            </span>
+          )}
+        </p>
         <div className="p-1 mx-1 bg-gray-200 rounded-lg">{tid}</div>
+        {/* Tooltip Portal for mobile: show as modal */}
+        {showDesc && desc && createPortal(
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+            onClick={() => setShowDesc(false)}
+          >
+            <div
+              className="bg-white border border-gray-400 shadow-lg rounded p-4 text-left text-gray-800 font-normal animate-fade-in max-w-xs w-full mx-4 relative"
+              onClick={e => e.stopPropagation()}
+            >
+              <span className="font-semibold">Description: </span>{desc}
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl"
+                onClick={() => setShowDesc(false)}
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
       </div>
       <div className="flex justify-between mt-2 items-center gap-2">
         <div>
