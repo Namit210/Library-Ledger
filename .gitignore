@@ -1,12 +1,12 @@
 
-./package-lock.json
-./node_modules/
-./dist/
-./coverage/
-./.env
-./.vscode/
-./.idea/
-./.DS_Store
+package-lock.json
+node_modules
+dist
+coverage
+.env
+.vscode
+.idea
+.DS_Store
 ./*.log
 ./*.tmp
 ./*.bak
