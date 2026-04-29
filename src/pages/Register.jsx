@@ -25,7 +25,8 @@ export default function Register(){
         }).then(response => response.json())
         .then(data => {
             if(data.success){
-                alert("Registration successful! user");
+                alert("Registration successful! Please login.");
+                window.location.href = "/";
             }
         })
     }
@@ -50,6 +51,10 @@ export default function Register(){
                     </div>
                     <div>
                         <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Register</button>
+                    </div>
+                    <div className="text-center mt-4">
+                        <span className="text-gray-600 text-sm">Already Registered? </span>
+                        <a href="/" className="text-blue-600 hover:underline text-sm font-medium">Login</a>
                     </div>
                 </form>
             </div>
