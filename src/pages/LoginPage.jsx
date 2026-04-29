@@ -27,19 +27,19 @@ export default function LoginPage() {
                 storeToken(data.token);
                 if (data.user.role === 'admin') {
                     window.location.href = '/admin/dashboard';
-                } else if (data.user.role === 'bace') {
-                    // Wait for BACE details before redirecting
+                } else if (data.user.role === 'store') {
+                    // Wait for Store details before redirecting
                     try {
-                        const res = await fetch(`${API_BASE_URL}/bace/getbyname/${data.user.name}`);
-                        if (!res.ok) throw new Error("Failed to fetch BACE details");
-                        const baceData = await res.json();
-                        if (!baceData || !baceData._id) {
-                            setError("BACE details not found. Please contact admin.");
+                        const res = await fetch(`${API_BASE_URL}/store/getbyname/${data.user.name}`);
+                        if (!res.ok) throw new Error("Failed to fetch Store details");
+                        const storeData = await res.json();
+                        if (!storeData || !storeData._id) {
+                            setError("Store details not found. Please contact admin.");
                         } else {
-                            window.location.href = `/bacehome/${baceData._id}`;
+                            window.location.href = `/storehome/${storeData._id}`;
                         }
                     } catch (err) {
-                        setError("Error fetching BACE details. Please try again later.");
+                        setError("Error fetching Store details. Please try again later.");
                     }
                 }
             } else {

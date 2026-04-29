@@ -4,6 +4,7 @@ import BookButton from "../components/BookButton";
 import Card from "../components/Card";
 import TableData from "../components/TableData";
 import Allot from "../components/Allot";
+import AddStock from "../components/AddStock";
 import {  useEffect, useState } from "react";
 import { SiBookstack } from "react-icons/si";
 import { MdSportsScore } from "react-icons/md";
@@ -14,6 +15,9 @@ export default function AdminHome() {
   const [adminDetails, setAdminDetails] = useState({});
   const [transactions, setTransactions] = useState([]);
   const [monthScore, setMonthScore] = useState(0);
+
+  const [allotVisible, setAllotVisible] = useState(false);
+  const [addStockVisible, setAddStockVisible] = useState(false);
 
   useEffect(() => {
     const getAdminData = async () => {
@@ -42,8 +46,9 @@ export default function AdminHome() {
     const currentYear = now.getFullYear();
     const score = transactions
       .filter((tx) => {
+        const isNotRequest = !(tx.transaction_id.startsWith('request-'))
         const txDate = new Date(tx.timestamp);
-        return txDate.getMonth() === currentMonth && txDate.getFullYear() === currentYear;
+        return txDate.getMonth() === currentMonth && txDate.getFullYear() === currentYear && isNotRequest;
       })
       .reduce((sum, tx) => sum + (tx.total_books || 0), 0);
     setMonthScore(score);
@@ -51,7 +56,6 @@ export default function AdminHome() {
   
   
 
-  const [allotVisible, setAllotVisible] = useState(false);
 
   return (
     <div>
@@ -59,21 +63,29 @@ export default function AdminHome() {
       <div className="flex justify-between">
         <Card title={'Admin'} desc={''} bg={'oklch(79.5% 0.184 86.047) '} />
         <div className="flex flex-wrap items-center justify-center">
-        <Card title={'Instock'} desc={adminDetails.big_books} bg={'oklch(64.8% 0.2 131.684)'} icon={SiBookstack}/>
-        <Card title={'This month Score'} desc={monthScore} bg={'oklch(43.2% 0.232 292.759)'} icon={MdSportsScore} />
+          < BookButton title={ 'Add to Stock'} color={'oklch(64.8% 0.2 131.684)'}
+            onClick={
+              ()=>{
+                setAddStockVisible(true);
+                              
+              }
+            }
+           
+          />
+        <Card title={'Instock'} desc={adminDetails.total_books} bg={'oklch(64.8% 0.2 131.684)'} icon={SiBookstack}/>
+        <Card title={'This month Allotment'} desc={monthScore} bg={'oklch(43.2% 0.232 292.759)'} icon={MdSportsScore} />
 
         <div className="flex flex-col items-center justify-center">
 
           <div onClick={
             ()=>{
               setAllotVisible(true);
-              console.log(adminDetails);
                             
             }
           }>
           < BookButton title={'Allot Books'} color={'oklch(64.8% 0.2 131.684)'} />
           </div>
-          < BookButton title={'Get BACE info'} color={'oklch(70.7% 0.165 254.624)'}  link={'/binfo'}/>
+          < BookButton title={'Get Stores info'} color={'oklch(70.7% 0.165 254.624)'}  link={'/sinfo'}/>
         </div>
 
       </div>
@@ -91,6 +103,11 @@ export default function AdminHome() {
 
       <Allot isOpen={allotVisible}
         onClose={()=>setAllotVisible(false)}
+        onSuccess={()=>{}}
+      />
+
+      <AddStock isOpen={addStockVisible}
+        onClose={()=>setAddStockVisible(false)}
         onSuccess={()=>{}}
       />
 

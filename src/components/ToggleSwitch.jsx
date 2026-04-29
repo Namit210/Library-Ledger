@@ -16,7 +16,7 @@ const Toggle = ({checked, onChange}) => {
       
       {/* Label Text */}
       <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-        {checked ? 'Admin' : 'Bace'}
+        {checked ? 'Admin' : 'Store'}
       </span>
     </label>
   );

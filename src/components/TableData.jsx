@@ -14,7 +14,7 @@ export default function TableData({ name }) {
   const [payVisible, setPayVisible] = useState(false);
   const [allotVisible, setAllotVisible] = useState(false);
   const [selectedTx, setSelectedTx] = useState(null);
-  const [role, setRole] = useState("bace");
+  const [role, setRole] = useState("store");
   const [hoveredTxId, setHoveredTxId] = useState(null);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function TableData({ name }) {
 
   // ✅ Combined filtering (role + search)
   const transactions = allTransactionsdata.filter((transaction) => {
-    const matchesRole = name === "Admin" || transaction.bace === name;
+    const matchesRole = name === "Admin" || transaction.store === name;
     const matchesSearch =
       query.trim() === "" ||
       transaction.bace?.toLowerCase().includes(query.toLowerCase()) ||
@@ -66,7 +66,7 @@ export default function TableData({ name }) {
         {transactions.map((row) => (
           <MobileCard
             key={row._id}
-            bace={row.bace}
+            store={row.store}
             tid={row.transaction_id}
             books={row.total_books}
             amount={row.amount?.paid}
@@ -88,7 +88,7 @@ export default function TableData({ name }) {
           <div className="grid grid-cols-6 gap-2 font-semibold bg-gray-200 rounded-t-lg px-2 py-3 text-center text-sm md:text-base">
             <div>Date</div>
             <div>Time</div>
-            <div>Bace Name</div>
+            <div>Store Name</div>
             <div>Transaction ID</div>
             <div>Total books</div>
             <div>Amount</div>
@@ -101,7 +101,7 @@ export default function TableData({ name }) {
               >
                 <div>{new Date(row.timestamp).toDateString()}</div>
                 <div>{new Date(row.timestamp).toLocaleTimeString()}</div>
-                <div>{row.bace}</div>
+                <div>{row.store}</div>
                 <div>
                   <div className="flex items-center justify-center relative">
                     <span>{row.transaction_id}</span>

@@ -7,7 +7,7 @@ export default function Register(){
     const [name, setname] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [role, setRole] = useState('bace'); // Default role is 'bace'
+    const [role, setRole] = useState('store'); // Default role is 'store'
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -34,7 +34,7 @@ export default function Register(){
             <div className="h-[90vh] flex items-center justify-center bg-gray-100 font-outfit">
                 <div className="bg-white p-4 sm:p-8 rounded-lg shadow-md w-full max-w-xs sm:max-w-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-                <ToggleSwitch Name="role" onChange={(checked) => setRole(checked ? 'admin' : 'bace')} checked={role==='admin'} />
+                <ToggleSwitch Name="role" onChange={(checked) => setRole(checked ? 'admin' : 'store')} checked={role==='admin'} />
                 <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="username" className="block text-sm font-medium text-gray-700">Name</label>

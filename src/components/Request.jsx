@@ -5,39 +5,39 @@ import { API_BASE_URL } from "../config";
 
 export default function Request({isOpen, onClose}) {
 
-    const bacename  = jwtDecode(localStorage.getItem('token')).name
+    const storename  = jwtDecode(localStorage.getItem('token')).name
     const [smallBooks, setSmallBooks] = useState(0);
     const [bigBooks, setBigBooks] = useState(0);
-    const [mahaBigBooks, setMahaBigBooks] = useState(0);
+    const [mediumBooks, setMediumBooks] = useState(0);
     const [desc, setDesc] = useState('');
 
     if(!isOpen) return null;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const totalBooks = Number(smallBooks) + Number(bigBooks) + Number(mahaBigBooks);
+        const totalBooks = Number(smallBooks) + Number(bigBooks) + Number(mediumBooks);
         // Send allotment data to backend API
-        fetch(`${API_BASE_URL}/bace/request`, {
+        fetch(`${API_BASE_URL}/store/request`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({ 
-                name: bacename,
+                name: storename,
                 small_books: Number(smallBooks),
                 big_books: Number(bigBooks),
-                mahabig_books: Number(mahaBigBooks),
+                medium_books: Number(mediumBooks),
                 desc
              }),
         })
         .then(response => response.json())
         .then(data => {
             if(data.success){
-                alert("Books allotted successfully!");
-                onClose(); // Close the allotment form after successful submission
+                alert("Books request sent successfully!");
+                onClose(); // Close the request form after successful submission
             } else {
-                alert("Allotment failed: " + data.message);
+                alert("Request failed: " + data.message);
             }
         })
         .catch(error => console.error("Error during allotment:", error));
@@ -53,24 +53,25 @@ export default function Request({isOpen, onClose}) {
                 
                 <form onSubmit={handleSubmit} >
                     <div className="mb-4">
-                        <label htmlFor="bacename" className="block text-sm font-medium text-gray-700">BACE Name</label>
-                        <span id="bacename" name="bacename" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{bacename}</span>
+                        <label htmlFor="storename" className="block text-sm font-medium text-gray-700">Store Name</label>
+                        <span id="storename" name="storename" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{storename}</span>
                     </div>
                     <div className="mb-4 flex">
                         <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">Small Books</label>
                         <input type="number" id="smallBooks" name="smallBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setSmallBooks(e.target.value)}/>
                     </div>
                     <div className="mb-4 flex">
+                        <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">Medium Books</label>
+                        <input type="number" id="mediumBooks" name="mediumBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setMediumBooks(e.target.value)}/>
+                    </div>
+                    <div className="mb-4 flex">
                         <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">Big Books</label>
                         <input type="number" id="bigBooks" name="bigBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setBigBooks(e.target.value)}/>
                     </div>
-                    <div className="mb-4 flex">
-                        <label htmlFor="booktitle" className="block text-sm font-medium text-gray-700">MahaBig Books</label>
-                        <input type="number" id="mahaBigBooks" name="mahaBigBooks" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onChange={(e)=>setMahaBigBooks(e.target.value)}/>
-                    </div>
+                    
                     <div className="mb-4 flex gap-2 items-center">
                         <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">Total</label>
-                        <span id="quantity" name="quantity" className="" >{Number(smallBooks) + Number(bigBooks) + Number(mahaBigBooks)}
+                        <span id="quantity" name="quantity" className="" >{Number(smallBooks) + Number(bigBooks) + Number(mediumBooks)}
                             </span>
                     </div>
                     <div className="mb-4">

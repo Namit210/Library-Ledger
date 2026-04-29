@@ -44,19 +44,19 @@ export default function Pay({isOpen, onClose, tx, onSuccess}) {
                 <button onClick={onClose} className="absolute top-2 right-2 text-white hover:text-gray-700 bg-red-500 rounded-full p-1 font-bold text-xl">
                     Close
                     </button>
-                <h2 className="text-2xl font-bold mb-4">Submit the Lakshmi</h2>
+                <h2 className="text-2xl font-bold mb-4">Submit Money</h2>
                 
                 <form onSubmit={handleSubmit} >
                     <div className="mb-4 flex items-center gap-2">
-                        <label htmlFor="bacename" className="block text-sm font-medium text-gray-700">BACE Name</label>
-                        <span className="block px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{tx.bace}</span>
+                        <label htmlFor="storename" className="block text-sm font-medium text-gray-700">Store Name</label>
+                        <span className="block px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{tx.store}</span>
                     </div>
                     <div className="mb-4 flex items-center gap-2">
-                        <label htmlFor="bacename" className="block text-sm font-medium text-gray-700">Amount Paid</label>
+                        <label htmlFor="storename" className="block text-sm font-medium text-gray-700">Amount Paid</label>
                         <span className="block px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{tx.amount.paid}</span>
                     </div>
                     <div className="mb-4 flex items-center gap-2">
-                        <label htmlFor="bacename" className="block text-sm font-medium text-gray-700">Amount Pending</label>
+                        <label htmlFor="storename" className="block text-sm font-medium text-gray-700">Amount Pending</label>
                         <span className="block px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 ">{tx.amount.pending}</span>
                     </div>
                     <div className="mb-4 ">

@@ -3,7 +3,7 @@ import { FiInfo } from "react-icons/fi";
 import { createPortal } from "react-dom";
 
 export default function MobileCard({
-  bace,
+  store,
   tid,
   books,
   amount,
@@ -26,8 +26,8 @@ export default function MobileCard({
         <div>{timestamp}</div>
       </div>
       <div>
-        <p className="text-sm font-bold text-green-900">BACE NAME</p>
-        <h1 className="font-bold text-2xl">{bace}</h1>
+        <p className="text-sm font-bold text-green-900">Store NAME</p>
+        <h1 className="font-bold text-2xl">{store}</h1>
       </div>
       <div>
         <p className="text-sm font-bold text-green-900 uppercase flex items-center gap-1">

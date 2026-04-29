@@ -10,15 +10,15 @@ import { SiBookstack } from "react-icons/si";
 import { MdSportsScore } from "react-icons/md";
 import { jwtDecode } from "jwt-decode";
 
-export default function BaceHome() {
+export default function StoreHome() {
 
-  const [baceDetails, setBaceDetails] = useState({});
+  const [storeDetails, setStoreDetails] = useState({});
   const { id } = useParams();
   const [payVisible, setPayVisible] = useState(false);
   const [requestVisible, setRequestVisible] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [monthScore, setMonthScore] = useState(0);
-  const [role, setRole] = useState("bace");
+  const [role, setRole] = useState("store");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -28,8 +28,8 @@ export default function BaceHome() {
   
 
   useEffect(() => {
-    const baceData = async () => {
-      const response = await fetch(`${API_BASE_URL}/bace/get-details/${id}`, {
+    const storeData = async () => {
+      const response = await fetch(`${API_BASE_URL}/store/get-details/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -37,9 +37,9 @@ export default function BaceHome() {
         }
       });
       const data = await response.json();
-      setBaceDetails(data);
+      setStoreDetails(data);
     };
-    baceData();
+    storeData();
 
     // Fetch all transactions for score calculation
     const token = localStorage.getItem("token");
@@ -54,18 +54,19 @@ export default function BaceHome() {
   }, [id]);
 
   useEffect(() => {
-    // Calculate this month's score (sum of total_books for current month for this bace)
+    // Calculate this month's score (sum of total_books for current month for this store)
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
     const score = transactions
       .filter((tx) => {
+        const isNotRequest = !(tx.transaction_id.startsWith('request-'))
         const txDate = new Date(tx.timestamp);
-        return tx.bace === baceDetails.name && txDate.getMonth() === currentMonth && txDate.getFullYear() === currentYear;
+        return tx.store === storeDetails.name && txDate.getMonth() === currentMonth && txDate.getFullYear() === currentYear && isNotRequest;
       })
       .reduce((sum, tx) => sum + (tx.total_books || 0), 0);
     setMonthScore(score);
-  }, [transactions, baceDetails.name]);
+  }, [transactions, storeDetails.name]);
 
  
 
@@ -73,10 +74,10 @@ export default function BaceHome() {
     <div>
 
       <div className="flex justify-between flex-wrap px-6 items-center">
-        <Card title={'BACE Name'} desc={baceDetails.name} bg={'oklch(79.5% 0.184 86.047) '} />
+        <Card title={'Store Name'} desc={storeDetails.name} bg={'oklch(79.5% 0.184 86.047) '} />
         <div className="flex flex-wrap items-center justify-center">
-        <Card title={'Instock'} desc={baceDetails.total_books} bg={'oklch(64.8% 0.2 131.684)'} icon={SiBookstack}/>
-        <Card title={'This month Score'} desc={monthScore} bg={'oklch(43.2% 0.232 292.759)'} icon={MdSportsScore}/>
+        <Card title={'Instock'} desc={storeDetails.total_books} bg={'oklch(64.8% 0.2 131.684)'} icon={SiBookstack}/>
+        <Card title={'This Month Allotment'} desc={monthScore} bg={'oklch(43.2% 0.232 292.759)'} icon={MdSportsScore}/>
         {
           role !== 'admin' &&
           <div className="flex flex-col items-center justify-center">
@@ -95,7 +96,7 @@ export default function BaceHome() {
         <div className="m-2 text-2xl ">Transaction History</div>
 
         <div className="max-h-[70vh] overflow-y-auto border rounded-lg">
-          <TableData name= {baceDetails.name} />
+          <TableData name= {storeDetails.name} />
         </div>
 
       </div>
